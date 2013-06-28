@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row-fluid" ng-repeat="group in colors">
+    <h1>{{group.name}}</h1>
+    <p>{{group.comment}}</p>
+    <div class="span3" ng-repeat="color in group.colors">
+      <div class="thumbnail" style="background-color: {{color.color}}; width:100px; height:100px;"></div>
+      <ul class="no-bullet">
+        <li>{{color.name}}</li>
+        <li>{{color.color}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
