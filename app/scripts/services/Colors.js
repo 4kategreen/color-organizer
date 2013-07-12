@@ -35,63 +35,76 @@ angular.module('colorOrganizerApp')
     };
 
     return {
-      get: function() {
+      dummy: function() {
         var colorList = {};
         var colors = [{
           'name': 'Global Values',
           'comment' : 'About this Group',
           'colors' : [{
             'name': 'primary',
-            'color': '#36434c'
+            'color': '#36434c',
+            'type': 'background'
           }, {
             'name': 'secondary',
-            'color': '#edf7ff'
+            'color': '#edf7ff',
+            'type': 'background'
           }, {
             'name': 'tertiary',
-            'color': '#b6cbd9'
+            'color': '#b6cbd9',
+            'type': 'background'
           }]
         }, {
           'name': 'Major Roles',
           'comment': 'Assign colors to variable roles',
           'colors': [{
             'name': 'base-color',
-            'link': 'primary'
+            'link': 'primary',
+            'type': 'background'
           }, {
             'name': 'heading-color',
-            'color': '#36434d'
+            'color': '#36434d',
+            'type': 'text'
           }, {
             'name': 'seconary-heading-color',
-            'color': '#0088cc'
+            'color': '#0088cc',
+            'type': 'text'
           }]
         }, {
           'name': 'Grays',
           'colors': [{
             'name': 'chronGrayLight',
-            'color': '#f7f5f2'
+            'color': '#f7f5f2',
+            'type': ['background','type']
           }, {
             'name': 'chronGray',
-            'color': '#e6e4e1'
+            'color': '#e6e4e1',
+            'type': ['background','type']
           }, {
             'name': 'chronGrayDark',
-            'color': '#3a3a3a'
+            'color': '#3a3a3a',
+            'type': ['background','type']
           }]
         }, {
           'name': 'Primary Colors',
           'colors': [{
             'name': 'white',
-            'color': '#ffffff'
+            'color': '#ffffff',
+            'type': 'background'
           }]
         }, {
           'name': 'Scaffolding',
           'colors': [{
             'name': 'bodyBackground',
-            'link': 'white'
+            'link': 'white',
+            'type': 'background'
           }, {
             'name': 'textColor',
-            'link': 'chronGrayDark'
+            'link': 'chronGrayDark',
+            'type': 'type'
           }, {
             'name': 'footer',
-            'color': '#004573'
+            'color': '#004573',
+            'type': 'background'
           }]
         }];
 
@@ -105,6 +118,13 @@ angular.module('colorOrganizerApp')
           });
         });
         return colors;
+      },
+      get: {
+        // open file
+
+        // scrape each line
+
+        // insert into json
       }
     };
   });
