@@ -122,11 +122,11 @@ angular.module('colorOrganizerApp')
       get: function() {
         // open file
         $http.get('styles/colors.less').success(function(data) {
-          console.log(data);
-        });
         // scrape each line
+        // foreach here gives one character at a time. gonna have to use regex
 
         // insert into json
+        });
       }
     };
   }]);
