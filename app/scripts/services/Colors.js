@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('colorOrganizerApp')
-  .service('Colors', function Colors() {
+  .service('Colors', ['$http', function ($http) {
     /**
       Parses any variable links to get the real color.
     */
@@ -119,12 +119,14 @@ angular.module('colorOrganizerApp')
         });
         return colors;
       },
-      get: {
+      get: function() {
         // open file
-
+        $http.get('styles/colors.less').success(function(data) {
+          console.log(data);
+        });
         // scrape each line
 
         // insert into json
       }
     };
-  });
+  }]);
