@@ -123,7 +123,8 @@ angular.module('colorOrganizerApp')
         var elements = [],
             colorList = [],
             holder = {
-              colors: []
+              colors: [],
+              sizes: []
             },
             variable = /^(@.+):\s+([#@\w\/]+);/gi,
             lineComment = /^(\/\/)\s(.+)/g;
@@ -150,10 +151,27 @@ angular.module('colorOrganizerApp')
             } else if (ele) {
 
               // get variables
-              holder.colors.push({
-                name: ele[1],
-                color: ele[2]
-              });
+              var value = ele[2],
+                  elementInfo = {
+                    name: ele[1]
+                  };
+
+              if (/[\@\#]/g.exec(value[0])) {
+                elementInfo.type = 'color';
+                if (value[0] === '#') {
+                  elementInfo.color = value;
+                } else {
+                  elementInfo.link = value;
+                }
+
+                holder.colors.push(elementInfo);
+              // TODO
+              } else if (/px/.exec(value[0])) {
+                elementInfo.type = 'size';
+                elementInfo.value = value;
+
+                holder.sizes.push(elementInfo);
+              }
 
             // get empty line/reset
             } else if (line.length === 0) {
@@ -163,7 +181,7 @@ angular.module('colorOrganizerApp')
               // if there's stuff in the holder, push it to colors. otherwise, skip over.
               if (holder.name !== undefined) {
                 elements.push(holder);
-                holder = { 'colors': [] };
+                holder = { colors: [], sizes: [] };
               }
 
             } else { console.log('does not match: '+line); }
@@ -175,6 +193,7 @@ angular.module('colorOrganizerApp')
         angular.forEach(elements, function(group) {
           angular.forEach(group.colors, function(colors) {
             if (colors.link) {
+              // TODO
               colors.color = parseLinks(colors.link, colorList);
             }
           });
