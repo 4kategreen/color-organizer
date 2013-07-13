@@ -1,11 +1,11 @@
 <div class="container">
-  <div class="row-fluid thumbnails" ng-repeat="group in colors">
+  <div class="row-fluid thumbnails" ng-repeat="group in elements">
     <h1>{{group.name}}</h1>
     <p>{{group.comment}}</p>
     <div class="span3" ng-repeat="color in group.colors">
       <div class="thumbnail" style="background-color: {{color.color}}; height:100px"></div>
       <ul class="no-bullet">
-        <li>Color Name: @{{color.name}}</li>
+        <li>Color Name: {{color.name}}</li>
         <li>Color: {{color.color}}</li>
         <li ng-show="color.link">Color Link: @{{color.link}}</li>
       </ul>

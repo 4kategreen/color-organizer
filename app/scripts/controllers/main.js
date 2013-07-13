@@ -2,7 +2,7 @@
 
 angular.module('colorOrganizerApp')
   .controller('MainCtrl', ['$scope', 'Colors', function ($scope, Colors) {
-    $scope.colors = Colors.get();
+    $scope.elements = Colors.get();
     $scope.manualStyle = '#ffffff';
 
     $scope.a = false;
