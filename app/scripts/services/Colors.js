@@ -37,7 +37,7 @@ angular.module('colorOrganizerApp')
     return {
       dummy: function() {
         var colorList = {};
-        var colors = [{
+        var elements = [{
           'name': 'Global Values',
           'comment' : 'About this Group',
           'colors' : [{
@@ -108,25 +108,79 @@ angular.module('colorOrganizerApp')
           }]
         }];
 
-        colorList = createColorList(colors);
+        colorList = createColorList(elements);
 
-        angular.forEach(colors, function(group) {
+        angular.forEach(elements, function(group) {
           angular.forEach(group.colors, function(colors) {
             if (colors.link) {
               colors.color = parseLinks(colors.link, colorList);
             }
           });
         });
-        return colors;
+        return elements;
       },
       get: function() {
+        var elements = [],
+            colorList = [],
+            holder = {
+              colors: []
+            },
+            variable = /^(@.+):\s+([#@\w\/]+);/gi,
+            lineComment = /^(\/\/)\s(.+)/g;
+
         // open file
         $http.get('styles/colors.less').success(function(data) {
         // scrape each line
-        // foreach here gives one character at a time. gonna have to use regex
+          var lines = data.split('\n');
 
-        // insert into json
+          angular.forEach(lines, function(line) {
+            var comment = lineComment.exec(line),
+                ele = variable.exec(line);
+
+            // get comments
+            if (comment) {
+
+              console.log(comment[2]);
+              if (holder.name === undefined) {
+                holder.name = comment[2];
+              } else {
+                holder.comment = comment[2];
+              }
+
+            } else if (ele) {
+
+              // get variables
+              holder.colors.push({
+                name: ele[1],
+                color: ele[2]
+              });
+
+            // get empty line/reset
+            } else if (line.length === 0) {
+
+              console.log('empty line');
+              console.log(holder);
+              // if there's stuff in the holder, push it to colors. otherwise, skip over.
+              if (holder.name !== undefined) {
+                elements.push(holder);
+                holder = { 'colors': [] };
+              }
+
+            } else { console.log('does not match: '+line); }
+          });
         });
+
+        colorList = createColorList(elements);
+
+        angular.forEach(elements, function(group) {
+          angular.forEach(group.colors, function(colors) {
+            if (colors.link) {
+              colors.color = parseLinks(colors.link, colorList);
+            }
+          });
+        });
+
+        return elements;
       }
     };
   }]);
