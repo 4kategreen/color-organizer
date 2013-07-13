@@ -3,6 +3,20 @@ Color Organizer
 
 This application will take your site's LESS or Sass variable set and create a page of colors to view and work with.
 
+Right now, it parses colors and variables marked as colors. It makes an attempt at sizes (only pixels just yet), but it's not working right.
+
+Install Instructions
+---
+I haven't tested this yet, but I think this should work.
+
+1. Make sure node, npm, and bower are installed.
+2. Clone the repo where you want.
+3. Type npm install
+4. Type bower install
+
+TODO
+---
+
 In the future, I'd like to:
 - create ways to parse LESS and Sass color math.
 - parse and display ems and other font sizes.
