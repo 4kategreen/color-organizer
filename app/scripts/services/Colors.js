@@ -125,23 +125,20 @@ angular.module('colorOrganizerApp')
             holder = {
               colors: [],
               sizes: []
-            },
-            variable = /^(@.+):\s+([#@\w\/]+);/gi,
-            lineComment = /^(\/\/)\s(.+)/g;
+            };
 
         // open file
         $http.get('styles/colors.less').success(function(data) {
         // scrape each line
           var lines = data.split('\n');
 
-          angular.forEach(lines, function(line) {
-            var comment = lineComment.exec(line),
-                ele = variable.exec(line);
+          angular.forEach(lines, function(line, key) {
+            var comment = /^(\/{2})\s+(.+)/gi.exec(line),
+                ele = /^(@.+):\s+([#@\w\/]+);/gi.exec(line);
 
             // get comments
             if (comment) {
 
-              console.log(comment[2]);
               if (holder.name === undefined) {
                 holder.name = comment[2];
               } else {
@@ -176,15 +173,15 @@ angular.module('colorOrganizerApp')
             // get empty line/reset
             } else if (line.length === 0) {
 
-              console.log('empty line');
-              console.log(holder);
               // if there's stuff in the holder, push it to colors. otherwise, skip over.
               if (holder.name !== undefined) {
                 elements.push(holder);
                 holder = { colors: [], sizes: [] };
               }
 
-            } else { console.log('does not match: '+line); }
+            } else { 
+              console.log((key+1)+' '+line);
+            }
           });
         });
 
