@@ -35,6 +35,94 @@ angular.module('colorOrganizerApp')
     };
 
     return {
+      get: function() {
+        var elements = [],
+            colorList = [],
+            holder = {
+              colors: [],
+              sizes: []
+            };
+
+        // open file
+        $http.get('styles/colors.less').success(function(data) {
+        // scrape each line
+          var lines = data.split('\n');
+
+          angular.forEach(lines, function(line, key) {
+            var comment = /^(\/{2})\s+(.+)/gi.exec(line),
+                ele = /^(@.+):\s+([#@\w\/]+);/gi.exec(line);
+
+            // get comments
+            if (comment) {
+
+              if (holder.name === undefined) {
+                holder.name = comment[2];
+              } else {
+
+                // if this isn't isn't a line separator comment
+                if (!/\-+/.exec(comment[2])) {
+                  holder.comment = comment[2];
+                }
+              }
+
+            } else if (ele) {
+
+              // get variables
+              var value = ele[2],
+                  elementInfo = {
+                    name: ele[1]
+                  };
+
+              if (/[\@\#]/g.exec(value[0])) {
+                elementInfo.type = 'color';
+                if (value[0] === '#') {
+                  elementInfo.color = value;
+                } else {
+                  elementInfo.link = value;
+                }
+
+                holder.colors.push(elementInfo);
+
+              // TODO: color math, pixels, other math
+              } else if (/[darken|lighten|spin]/.exec(value)) {
+                //holder.color = 'color math: '+value;
+              } else if (/px/.exec(value)) {
+                elementInfo.type = 'size';
+                elementInfo.value = value;
+
+                holder.sizes.push(elementInfo);
+              } else {
+                console.log(value);
+              }
+
+            // get empty line/reset
+            } else if (line.length === 0) {
+
+              // if there's stuff in the holder, push it to colors. otherwise, skip over.
+              if (holder.name !== undefined) {
+                elements.push(holder);
+                holder = { colors: [], sizes: [] };
+              }
+
+            } else { 
+              console.log((key+1)+' '+line);
+            }
+          });
+        });
+
+        colorList = createColorList(elements);
+
+        angular.forEach(elements, function(group) {
+          angular.forEach(group.colors, function(colors) {
+            if (colors.link) {
+              // TODO
+              colors.color = parseLinks(colors.link, colorList);
+            }
+          });
+        });
+
+        return elements;
+      },
       dummy: function() {
         var colorList = {};
         var elements = [{
@@ -117,85 +205,6 @@ angular.module('colorOrganizerApp')
             }
           });
         });
-        return elements;
-      },
-      get: function() {
-        var elements = [],
-            colorList = [],
-            holder = {
-              colors: [],
-              sizes: []
-            };
-
-        // open file
-        $http.get('styles/colors.less').success(function(data) {
-        // scrape each line
-          var lines = data.split('\n');
-
-          angular.forEach(lines, function(line, key) {
-            var comment = /^(\/{2})\s+(.+)/gi.exec(line),
-                ele = /^(@.+):\s+([#@\w\/]+);/gi.exec(line);
-
-            // get comments
-            if (comment) {
-
-              if (holder.name === undefined) {
-                holder.name = comment[2];
-              } else {
-                holder.comment = comment[2];
-              }
-
-            } else if (ele) {
-
-              // get variables
-              var value = ele[2],
-                  elementInfo = {
-                    name: ele[1]
-                  };
-
-              if (/[\@\#]/g.exec(value[0])) {
-                elementInfo.type = 'color';
-                if (value[0] === '#') {
-                  elementInfo.color = value;
-                } else {
-                  elementInfo.link = value;
-                }
-
-                holder.colors.push(elementInfo);
-              // TODO
-              } else if (/px/.exec(value[0])) {
-                elementInfo.type = 'size';
-                elementInfo.value = value;
-
-                holder.sizes.push(elementInfo);
-              }
-
-            // get empty line/reset
-            } else if (line.length === 0) {
-
-              // if there's stuff in the holder, push it to colors. otherwise, skip over.
-              if (holder.name !== undefined) {
-                elements.push(holder);
-                holder = { colors: [], sizes: [] };
-              }
-
-            } else { 
-              console.log((key+1)+' '+line);
-            }
-          });
-        });
-
-        colorList = createColorList(elements);
-
-        angular.forEach(elements, function(group) {
-          angular.forEach(group.colors, function(colors) {
-            if (colors.link) {
-              // TODO
-              colors.color = parseLinks(colors.link, colorList);
-            }
-          });
-        });
-
         return elements;
       }
     };
