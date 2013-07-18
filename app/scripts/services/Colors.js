@@ -104,8 +104,6 @@ angular.module('colorOrganizerApp')
                 holder = { colors: [], sizes: [] };
               }
 
-            } else { 
-              console.log((key+1)+' '+line);
             }
           });
         });
