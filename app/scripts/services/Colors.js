@@ -45,6 +45,7 @@ angular.module('colorOrganizerApp')
 
         // open file
         $http.get('styles/colors.less').success(function(data) {
+
         // scrape each line
           var lines = data.split('\n');
 

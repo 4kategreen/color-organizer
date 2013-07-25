@@ -20,3 +20,10 @@ body {
     line-height: 1;
     letter-spacing: -1px;
 }
+
+.color-thumbnail {
+    height: 180px;
+}
+.color-thumbnail:nth-child(4n+1) {
+    margin-left: 0;
+}

@@ -3,12 +3,12 @@
       <h1>{{group.name}}</h1>
       <p>{{group.comment}}</p>
       <div class="row-fluid">
-        <div class="span3" ng-repeat="color in group.colors">
+        <div class="span3 color-thumbnail" ng-repeat="color in group.colors">
           <div class="thumbnail" style="background-color: {{color.color}}; height:100px"></div>
           <ul class="no-bullet">
-            <li>Color Name: {{color.name}}</li>
-            <li>Color: {{color.color}}</li>
-            <li ng-show="color.link">Color Link: {{color.link}}</li>
+            <li><b>Color Name</b>: {{color.name}}</li>
+            <li><b>Color</b>: {{color.color}}</li>
+            <li ng-show="color.link"><b>Color Link</b>: {{color.link}}</li>
           </ul>
         </div>
       </div>
@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<div class="well" draggable style="position:fixed; top:0; right:5%;">
+<div class="well" style="width: 250px; height: 250px; position:fixed; bottom:0; right:5%;">
   <h1>Compare Colors</h1>
   <div class="thumbnail" style="background-color: {{manualStyle}}; height:100px;"></div>
   <label for="manualStyle">
