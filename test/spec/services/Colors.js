@@ -2,18 +2,18 @@
 
 describe('Service: Colors', function () {
   var $httpBackend,
-      elements = '// Global values\n// main variables for the site\n// --------------------------------------------------\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;\n// Something else\n@number: 12px;';
+      Colors,
+      elements = "// Global values\n// main variables for the site\n// --------------------------------------------------\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;";
 
   // load the service's module
   beforeEach(module('colorOrganizerApp'));
 
   // instantiate service
-  var Colors;
   beforeEach(inject(function (_Colors_,$injector) {
     Colors = _Colors_;
 
     $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.when('GET', 'styles/colors.less').respond(elements);
+    $httpBackend.whenGET('styles/colors.less').respond(elements);
   }));
 
   afterEach(function() {
@@ -32,7 +32,6 @@ describe('Service: Colors', function () {
     expect(colors.length).toEqual(2);
     expect($injector.get($injector)).toBe($injector);
   });
-
 
   xit('should return an object where all colors have a color (not just a link)', function() {
     var colors = Colors.get();

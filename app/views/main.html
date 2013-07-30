@@ -1,35 +1,30 @@
 <div class="container">
+  <div class="row-fluid">
+    <button class="btn btn-large" ng-click="switchView(0)">Common</button>
+    <button class="btn btn-large" ng-click="switchView(1)">CHE</button>
+    <button class="btn btn-large" ng-click="switchView(2)">COP</button>
+  </div>
+</div>
+
+<div class="container">
+    <h1>{{active}}</h1>
     <div class="row-fluid" ng-repeat="group in elements">
-      <h1>{{group.name}}</h1>
+      <h2>{{group.name}}</h2>
       <p>{{group.comment}}</p>
       <div class="row-fluid">
-        <div class="span3" ng-repeat="color in group.colors">
+        <div class="span3 color-thumbnail" ng-repeat="color in group.colors">
           <div class="thumbnail" style="background-color: {{color.color}}; height:100px"></div>
           <ul class="no-bullet">
-            <li>Color Name: {{color.name}}</li>
-            <li>Color: {{color.color}}</li>
-            <li ng-show="color.link">Color Link: {{color.link}}</li>
+            <li><b>Color Name</b>: {{color.name}}</li>
+            <li><b>Color</b>: {{color.color}}</li>
+            <li ng-show="color.link"><b>Color Link</b>: {{color.link}}</li>
           </ul>
         </div>
       </div>
     </div>
 
-  <div class="row-fluid">
-    <h1>Checkbox Fun</h1>
-
-    <label class="checkbox">
-      <input class="checkbox" type="checkbox" ng-model="a">
-      I am A: {{a}}
-    </label>
-    <label class="checkbox">
-      <input type="checkbox" ng-model="b">
-      I am B: {{b}}
-    </label>
-  </div>
-</div>
-
-<div class="well" draggable style="position:fixed; top:0; right:5%;">
-  <h1>Compare Colors</h1>
+<div class="well" style="width: 250px; height: 250px; position:fixed; bottom:0; right:5%;">
+  <h2>Compare Colors</h2>
   <div class="thumbnail" style="background-color: {{manualStyle}}; height:100px;"></div>
   <label for="manualStyle">
     Enter a Color:

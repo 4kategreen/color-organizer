@@ -35,7 +35,7 @@ angular.module('colorOrganizerApp')
     };
 
     return {
-      get: function() {
+      get: function(file) {
         var elements = [],
             colorList = [],
             holder = {
@@ -44,7 +44,8 @@ angular.module('colorOrganizerApp')
             };
 
         // open file
-        $http.get('styles/colors.less').success(function(data) {
+        $http.get('styles/'+file).success(function(data) {
+
         // scrape each line
           var lines = data.split('\n');
 
@@ -106,16 +107,16 @@ angular.module('colorOrganizerApp')
 
             }
           });
-        });
 
-        colorList = createColorList(elements);
+          colorList = createColorList(elements);
 
-        angular.forEach(elements, function(group) {
-          angular.forEach(group.colors, function(colors) {
-            if (colors.link) {
-              // TODO
-              colors.color = parseLinks(colors.link, colorList);
-            }
+          angular.forEach(elements, function(group) {
+            angular.forEach(group.colors, function(colors) {
+              if (colors.link) {
+                // TODO
+                colors.color = parseLinks(colors.link, colorList);
+              }
+            });
           });
         });
 

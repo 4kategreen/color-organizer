@@ -25,7 +25,6 @@ describe('Controller: MainCtrl', function () {
     $httpBackend.flush();
   }));
 
-
   xit('gets a valid object from Color', function() {
     expect(scope.colors).toEqual(jasmine.any(Object));
   });

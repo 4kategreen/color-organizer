@@ -2,9 +2,17 @@
 
 angular.module('colorOrganizerApp')
   .controller('MainCtrl', ['$scope', 'Colors', function ($scope, Colors) {
-    $scope.elements = Colors.get();
+    $scope.colorSets = [
+      { 'name': 'Common','file': 'colors.less' },
+      { 'name': 'CHE', 'file': 'colors-che.less' },
+      { 'name': 'COP', 'file': 'colors-cop.less' }
+    ];
+    $scope.active = $scope.colorSets[0].name;
+    $scope.elements = Colors.get($scope.colorSets[0].file);
     $scope.manualStyle = '#ffffff';
 
-    $scope.a = false;
-    $scope.b = false;
+    $scope.switchView = function(set) {
+      $scope.active = $scope.colorSets[set].name;
+      $scope.elements = Colors.get($scope.colorSets[set].file);
+    }
   }]);
