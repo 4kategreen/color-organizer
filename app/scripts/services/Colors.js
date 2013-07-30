@@ -107,16 +107,16 @@ angular.module('colorOrganizerApp')
 
             }
           });
-        });
 
-        colorList = createColorList(elements);
+          colorList = createColorList(elements);
 
-        angular.forEach(elements, function(group) {
-          angular.forEach(group.colors, function(colors) {
-            if (colors.link) {
-              // TODO
-              colors.color = parseLinks(colors.link, colorList);
-            }
+          angular.forEach(elements, function(group) {
+            angular.forEach(group.colors, function(colors) {
+              if (colors.link) {
+                // TODO
+                colors.color = parseLinks(colors.link, colorList);
+              }
+            });
           });
         });
 
