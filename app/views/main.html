@@ -1,6 +1,15 @@
 <div class="container">
+  <div class="row-fluid">
+    <button class="btn btn-large" ng-click="switchView(0)">Common</button>
+    <button class="btn btn-large" ng-click="switchView(1)">CHE</button>
+    <button class="btn btn-large" ng-click="switchView(2)">COP</button>
+  </div>
+</div>
+
+<div class="container">
+    <h1>{{active}}</h1>
     <div class="row-fluid" ng-repeat="group in elements">
-      <h1>{{group.name}}</h1>
+      <h2>{{group.name}}</h2>
       <p>{{group.comment}}</p>
       <div class="row-fluid">
         <div class="span3 color-thumbnail" ng-repeat="color in group.colors">
@@ -15,7 +24,7 @@
     </div>
 
   <div class="row-fluid">
-    <h1>Checkbox Fun</h1>
+    <h2>Checkbox Fun</h2>
 
     <label class="checkbox">
       <input class="checkbox" type="checkbox" ng-model="a">
@@ -29,7 +38,7 @@
 </div>
 
 <div class="well" style="width: 250px; height: 250px; position:fixed; bottom:0; right:5%;">
-  <h1>Compare Colors</h1>
+  <h2>Compare Colors</h2>
   <div class="thumbnail" style="background-color: {{manualStyle}}; height:100px;"></div>
   <label for="manualStyle">
     Enter a Color:
