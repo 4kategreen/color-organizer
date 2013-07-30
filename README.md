@@ -9,10 +9,11 @@ Install Instructions
 ---
 I haven't tested this yet, but I think this should work.
 
-1. Make sure node, npm, and bower are installed.
-2. Clone the repo where you want.
-3. Type npm install
-4. Type bower install
+1. Make sure node and npm are installed for your OS.
+2. Install bower lobally (`npm install -g bower`)
+3. Clone the repo where you want.
+4. Type npm install
+5. Type bower install
 
 TODO
 ---
