@@ -24,6 +24,3 @@ body {
 .color-thumbnail {
     height: 180px;
 }
-.color-thumbnail:nth-child(4n+1) {
-    margin-left: 0;
-}
