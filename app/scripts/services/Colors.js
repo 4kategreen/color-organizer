@@ -60,7 +60,7 @@ angular.module('colorOrganizerApp')
 
           angular.forEach(lines, function(line, key) {
             var comment = /^(\/{2})\s+(.+)/gi.exec(line),
-                ele = /^(@.+):\s+(.+);/gi.exec(line);
+                ele = /^(@.+):\s+(.+)/gi.exec(line); // TODO: fix this to find comments
 
             // get comments
             if (comment) {
@@ -79,6 +79,7 @@ angular.module('colorOrganizerApp')
 
               // get variables
               var value = ele[2],
+                  //comment = ele[3],
                   elementInfo = {
                     name: ele[1]
                   };
