@@ -18,17 +18,25 @@ angular.module('colorOrganizerApp')
     };
 
     /**
-      Takes all colors from a parsed list and makes one single list to test against.
+      Takes all vars from a parsed list and makes one single list to test against.
+
+      Colors is default
     */
-    var createColorList = function(colors) {
+    var creteVariableList = function(vars, type) {
       var colorList = [];
 
-      angular.forEach(colors, function(group) {
-        angular.forEach(group.colors, function(color) {
-          if (color.color) {
-            colorList.push([color.name, color.color]);
-          }
-        });
+      angular.forEach(vars, function(group) {
+        if (type === 'size') {
+          angular.forEach(group.sizes, function(size) {
+            colorList.push([size.name, size.size]);            
+          });
+        } else {
+          angular.forEach(group.colors, function(color) {
+            if (color.color) {
+              colorList.push([color.name, color.color]);
+            }
+          });
+        }
       });
 
       return colorList;
@@ -38,6 +46,7 @@ angular.module('colorOrganizerApp')
       get: function(file) {
         var elements = [],
             colorList = [],
+            mathHolder = [], // for later calculations
             holder = {
               colors: [],
               sizes: []
@@ -51,7 +60,7 @@ angular.module('colorOrganizerApp')
 
           angular.forEach(lines, function(line, key) {
             var comment = /^(\/{2})\s+(.+)/gi.exec(line),
-                ele = /^(@.+):\s+([#@\w\/]+);/gi.exec(line);
+                ele = /^(@.+):\s+(.+);/gi.exec(line);
 
             // get comments
             if (comment) {
@@ -74,7 +83,11 @@ angular.module('colorOrganizerApp')
                     name: ele[1]
                   };
 
-              if (/[\@\#]/g.exec(value[0])) {
+              // math
+              if (/\s[\+\-\/\*]\s/.exec(value)) {
+                mathHolder.push(ele);
+              // color
+              } else if (/[\@\#]/g.exec(value[0])) {
                 elementInfo.type = 'color';
                 if (value[0] === '#') {
                   elementInfo.color = value;
@@ -84,17 +97,34 @@ angular.module('colorOrganizerApp')
 
                 holder.colors.push(elementInfo);
 
-              // TODO: color math, pixels, other math
-              } else if (/[darken|lighten|spin]/.exec(value)) {
-                //holder.color = 'color math: '+value;
               } else if (/px/.exec(value)) {
-                elementInfo.type = 'size';
+                var sizeType = /.+(\/{2})\s+(.+)/gi.exec(line);
+
+                elementInfo.type = ele[1];
+                elementInfo.style = sizeType[2];
                 elementInfo.value = value;
 
                 holder.sizes.push(elementInfo);
+              //TODO: color math, pixels, other math
+              //} else if (/[darken|lighten|spin]/.exec(value)) {
+                //holder.color = 'color math: '+value;
               } else {
                 console.log(value);
               }
+
+              // do maths. assumptions: 
+                // all variables have been declared before this one
+                // all maths are for lengths
+                // two elements, please. for now.
+              angular.forEach(mathHolder, function(ele){
+                var mathInfo = {},
+                    sizes = creteVariableList(elements, 'size'),
+                    calc = /(.+)\s+([\+\-\*\/])\s+(.+)/.exec(ele[2]);
+
+                mathInfo.name = ele[1];
+                holder.sizes.push(mathInfo);
+              });
+              mathHolder = [];
 
             // get empty line/reset
             } else if (line.length === 0) {
@@ -108,7 +138,7 @@ angular.module('colorOrganizerApp')
             }
           });
 
-          colorList = createColorList(elements);
+          colorList = creteVariableList(elements);
 
           angular.forEach(elements, function(group) {
             angular.forEach(group.colors, function(colors) {
@@ -195,7 +225,7 @@ angular.module('colorOrganizerApp')
           }]
         }];
 
-        colorList = createColorList(elements);
+        colorList = creteVariableList(elements);
 
         angular.forEach(elements, function(group) {
           angular.forEach(group.colors, function(colors) {
