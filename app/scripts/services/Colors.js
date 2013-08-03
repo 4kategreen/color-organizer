@@ -60,7 +60,7 @@ angular.module('colorOrganizerApp')
 
           angular.forEach(lines, function(line, key) {
             var comment = /^(\/{2})\s+(.+)/gi.exec(line),
-                ele = /^(@.+):\s+(.+)/gi.exec(line); // TODO: fix this to find comments
+                ele = /^(@.+):\s+(.+);\s*\/{0,2}\s*(.*)/gi.exec(line);
 
             // get comments
             if (comment) {
@@ -76,12 +76,13 @@ angular.module('colorOrganizerApp')
               }
 
             } else if (ele) {
+              console.log(ele);
 
               // get variables
               var value = ele[2],
-                  //comment = ele[3],
                   elementInfo = {
-                    name: ele[1]
+                    name: ele[1],
+                    comment: ele[3]
                   };
 
               // math
@@ -144,7 +145,6 @@ angular.module('colorOrganizerApp')
           angular.forEach(elements, function(group) {
             angular.forEach(group.colors, function(colors) {
               if (colors.link) {
-                // TODO
                 colors.color = parseLinks(colors.link, colorList);
               }
             });
