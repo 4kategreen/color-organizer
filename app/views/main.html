@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="row-fluid">
+  <div class="row">
     <button class="btn btn-large" ng-click="switchView(0)">Common</button>
     <button class="btn btn-large" ng-click="switchView(1)">CHE</button>
     <button class="btn btn-large" ng-click="switchView(2)">COP</button>
@@ -8,12 +8,12 @@
 
 <div class="container">
     <h1>{{active}}</h1>
-    <div class="row-fluid" ng-repeat="group in elements">
+    <div class="row" ng-repeat="group in elements">
       <h2>{{group.name}}</h2>
       <p>{{group.comment}}</p>
-      <div class="row-fluid" ng-show="group.colors">
+      <div class="row" ng-show="group.colors">
         <h3>Colors</h3>
-        <div class="span3 color-thumbnail" ng-repeat="color in group.colors">
+        <div class="col-lg-3 color-thumbnail" ng-repeat="color in group.colors">
           <div class="thumbnail" style="background-color: {{color.color}}; height:100px"></div>
           <ul class="unstyled">
             <li><b>Color Name</b>: {{color.name}}</li>
@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <div class="row-fluid" ng-show="group.sizes">
+      <div class="row" ng-show="group.sizes">
         <h3>Sizes</h3>
         <dl class="dl-horizontal">
           <span ng-repeat="size in group.sizes">
