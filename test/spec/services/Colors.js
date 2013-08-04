@@ -3,7 +3,7 @@
 describe('Service: Colors', function () {
   var $httpBackend,
       Colors,
-      elements = "// Global values\n// main variables for the site\n// --------------------------------------------------\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;";
+      elements = "// Global values\n// main variables for the site\n// --------------------------------------------------\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;\n\n";
 
   // load the service's module
   beforeEach(module('colorOrganizerApp'));
@@ -24,18 +24,22 @@ describe('Service: Colors', function () {
 
   it('should return an object', function () {
     $httpBackend.expectGET('styles/colors.less');
-    var colors = Colors.get();
+    var colors = {},
+        q = Colors.get('colors.less');
+
+    q.then(function(ele) {
+      colors = ele;
+    }, function(s) { console.log(s); });
 
     $httpBackend.flush();
 
-    expect(colors).toEqual(jasmine.any(Object));
-    expect(colors.length).toEqual(2);
-    expect($injector.get($injector)).toBe($injector);
+    expect(colors).toEqual(jasmine.any(Array));
+    //expect(colors).toEqual(elements);
   });
 
   xit('should return an object where all colors have a color (not just a link)', function() {
-    var colors = Colors.get();
-    var hasColor = true;
+    var colors = Colors.get('colors.less'),
+        hasColor = true;
 
     $httpBackend.flush();
 
