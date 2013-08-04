@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('colorOrganizerApp')
-  .service('Colors', ['$http', function ($http) {
+  .service('Colors', ['$http', '$q', function ($http, $q) {
     /**
       Parses any variable links to get the real color.
     */
@@ -22,7 +22,7 @@ angular.module('colorOrganizerApp')
 
       Colors is default
     */
-    var creteVariableList = function(vars, type) {
+    var createVariableList = function(vars, type) {
       var colorList = [];
 
       angular.forEach(vars, function(group) {
@@ -44,7 +44,8 @@ angular.module('colorOrganizerApp')
 
     return {
       get: function(file) {
-        var elements = [],
+        var deferred = $q.defer(),
+            elements = [],
             colorList = [],
             mathHolder = [], // for later calculations
             holder = {
@@ -54,8 +55,6 @@ angular.module('colorOrganizerApp')
 
         // open file
         $http.get('styles/'+file).success(function(data) {
-
-        // scrape each line
           var lines = data.split('\n');
 
           angular.forEach(lines, function(line, key) {
@@ -76,7 +75,6 @@ angular.module('colorOrganizerApp')
               }
 
             } else if (ele) {
-              console.log(ele);
 
               // get variables
               var value = ele[2],
@@ -120,7 +118,7 @@ angular.module('colorOrganizerApp')
                 // two elements, please. for now.
               angular.forEach(mathHolder, function(ele){
                 var mathInfo = {},
-                    sizes = creteVariableList(elements, 'size'),
+                    sizes = createVariableList(elements, 'size'),
                     calc = /(.+)\s+([\+\-\*\/])\s+(.+)/.exec(ele[2]);
 
                 mathInfo.name = ele[1];
@@ -140,7 +138,7 @@ angular.module('colorOrganizerApp')
             }
           });
 
-          colorList = creteVariableList(elements);
+          colorList = createVariableList(elements);
 
           angular.forEach(elements, function(group) {
             angular.forEach(group.colors, function(colors) {
@@ -149,9 +147,11 @@ angular.module('colorOrganizerApp')
               }
             });
           });
+
+          deferred.resolve(elements);
         });
 
-        return elements;
+        return deferred.promise;
       },
       dummy: function() {
         var colorList = {};
@@ -226,7 +226,7 @@ angular.module('colorOrganizerApp')
           }]
         }];
 
-        colorList = creteVariableList(elements);
+        colorList = createVariableList(elements);
 
         angular.forEach(elements, function(group) {
           angular.forEach(group.colors, function(colors) {

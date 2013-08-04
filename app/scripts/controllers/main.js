@@ -8,8 +8,14 @@ angular.module('colorOrganizerApp')
       { 'name': 'COP', 'file': 'colors-cop.less' }
     ];
     $scope.active = $scope.colorSets[0].name;
+    $scope.manualStyle = '#fff';
+
     $scope.elements = Colors.get($scope.colorSets[0].file);
-    $scope.manualStyle = '#ffffff';
+    $scope.elements.then(function(elements) {
+    	$scope.elements = elements;
+    }, function(status) {
+    	console.log(status);
+    });
 
     $scope.switchView = function(set) {
       $scope.active = $scope.colorSets[set].name;
