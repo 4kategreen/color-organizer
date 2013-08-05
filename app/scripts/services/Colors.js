@@ -63,7 +63,6 @@ angular.module('colorOrganizerApp')
 
             // get comments
             if (comment) {
-              //console.log('comment: '+comment[2]);
 
               if (holder.name === undefined) {
                 holder.name = comment[2];
