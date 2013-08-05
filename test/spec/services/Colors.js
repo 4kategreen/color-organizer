@@ -3,7 +3,9 @@
 describe('Service: Colors', function () {
   var $httpBackend,
       Colors,
-      elements = "// Global values\n// main variables for the site\n// --------------------------------------------------\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;\n\n";
+      singleGroup = "// Global values\n// main variables for the site\n// --------------------------------------------------\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;",
+      doubleGroup = "// Global values\n// main variables for the site\n// --------------------------------------------------\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n\n// Second One\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;",
+      doubleComment = "// Global values\n// main variables for the site\n// second comment\n // --------------------------------------------------\n@primary:                   #36434c;\n@secondary:                 #edf7ff;";
 
   // load the service's module
   beforeEach(module('colorOrganizerApp'));
@@ -13,7 +15,9 @@ describe('Service: Colors', function () {
     Colors = _Colors_;
 
     $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.whenGET('styles/colors.less').respond(elements);
+    $httpBackend.whenGET('styles/colors.less').respond(singleGroup);
+    $httpBackend.whenGET('styles/double.less').respond(doubleGroup);
+    $httpBackend.whenGET('styles/double-comment.less').respond(doubleComment);
   }));
 
   afterEach(function() {
@@ -34,12 +38,15 @@ describe('Service: Colors', function () {
     $httpBackend.flush();
 
     expect(colors).toEqual(jasmine.any(Array));
-    //expect(colors).toEqual(elements);
   });
 
-  xit('should return an object where all colors have a color (not just a link)', function() {
-    var colors = Colors.get('colors.less'),
-        hasColor = true;
+  it('should return an object where all colors have a color (not just a link)', function() {
+    var colors = {},
+        q = Colors.get('colors.less');
+
+    q.then(function(ele) {
+      colors = ele;
+    }, function(s) { console.log(s); });
 
     $httpBackend.flush();
 
@@ -59,8 +66,13 @@ describe('Service: Colors', function () {
   });
 
 
-  xit('parses blank lines so that it starts a new group of variables', function() {
-    var colors = Colors.get();
+  it('parses blank lines so that it starts a new group of variables', function() {
+    var colors = {},
+        q = Colors.get('double.less');
+
+    q.then(function(ele) {
+      colors = ele;
+    }, function(s) { console.log(s); });
 
     $httpBackend.flush();
 
@@ -68,10 +80,21 @@ describe('Service: Colors', function () {
   });
 
 
-  xit('parses comments correctly.', function() {
+  it('parses comments correctly.', function() {
+    var colors = {},
+        q = Colors.get('colors.less');
+
+    q.then(function(ele) {
+      colors = ele;
+    }, function(s) { console.log(s); });
+
+    $httpBackend.flush();
+
     // first comment is put in the element's name
+    expect(colors[0].name).toBe('Global values');
 
     // second comment is added to that group's comment.
+    expect(colors[0].comment).toBe('main variables for the site');
   });
 
   xit('parses a color and places it in the correct spot: colorList[n].colors', function() {
