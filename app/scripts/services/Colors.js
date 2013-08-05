@@ -56,6 +56,7 @@ angular.module('colorOrganizerApp')
         // open file
         $http.get('styles/'+file).success(function(data) {
           var lines = data.split('\n');
+          //console.log(lines);
 
           angular.forEach(lines, function(line, key) {
             var comment = /^(\/{2})\s+(.+)/gi.exec(line),
@@ -69,10 +70,17 @@ angular.module('colorOrganizerApp')
               } else {
 
                 // if this isn't isn't a line separator comment
+                // multiple comments: this needs to be better!
                 if (!/\-+/.exec(comment[2])) {
-                  holder.comment = comment[2];
+                  if (!holder.comment) {
+                    holder.comment = comment[2];
+                  } else {
+                    holder.comment+= comment[2];
+                  }
                 }
               }
+              // console.log('comment set '+holder.name);
+              // console.log(comment[2]);
 
             } else if (ele) {
 
@@ -128,13 +136,12 @@ angular.module('colorOrganizerApp')
 
             // get empty line/reset
             } else if (line.length === 0) {
-
+              console.log(key+' empty line');
               // if there's stuff in the holder, push it to colors. otherwise, skip over.
               if (holder.name !== undefined) {
                 elements.push(holder);
                 holder = { colors: [], sizes: [] };
               }
-
             }
           });
 
