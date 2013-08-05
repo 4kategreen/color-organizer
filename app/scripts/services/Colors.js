@@ -64,6 +64,8 @@ angular.module('colorOrganizerApp')
             // get comments
             if (comment) {
 
+              //parseComment(comment[2], holder);
+
               if (holder.name === undefined) {
                 holder.name = comment[2];
               } else {
@@ -78,6 +80,7 @@ angular.module('colorOrganizerApp')
                   }
                 }
               }
+            // end comment
 
             // get elements
             } else if (ele) {
@@ -131,6 +134,7 @@ angular.module('colorOrganizerApp')
                 holder.sizes.push(mathInfo);
               });
               mathHolder = [];
+            // end elements
 
             // get empty line/reset
             } else if (line.length === 0) {
@@ -141,13 +145,15 @@ angular.module('colorOrganizerApp')
                 holder = { colors: [], sizes: [] };
               }
             }
-          });
+          }); // end parse lines
 
+          // if there's anything left in the holder, put it in elements
           if (holder.name !== undefined) {
             elements.push(holder);
             holder = { colors: [], sizes: [] };
           }
 
+          // do linking
           colorList = createVariableList(elements);
 
           angular.forEach(elements, function(group) {
@@ -156,8 +162,9 @@ angular.module('colorOrganizerApp')
                 colors.color = parseLinks(colors.link, colorList);
               }
             });
-          });
+          }); // end linking
 
+          // all the processing is done.
           deferred.resolve(elements);
         });
 
