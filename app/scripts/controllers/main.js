@@ -17,6 +17,13 @@ angular.module('colorOrganizerApp')
     	console.log(status);
     });
 
+    // Eventually
+    // $scope.styles = $scope.getStyles();
+
+    // $scope.getStyles = function() {
+    // 	return;
+    // }
+
     $scope.switchView = function(set) {
       $scope.active = $scope.colorSets[set].name;
       $scope.elements = Colors.get($scope.colorSets[set].file);

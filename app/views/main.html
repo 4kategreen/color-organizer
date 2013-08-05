@@ -1,3 +1,10 @@
+<style> <!-- This is what I want to shoot for angular spitting out. -->
+  .typography-sample {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+</style>
+
 <div class="container">
   <div class="row">
     <button class="btn btn-large" ng-click="switchView(0)">Common</button>
@@ -25,13 +32,15 @@
       </div>
 
       <div class="row" ng-show="group.sizes">
+
         <h3>Sizes</h3>
         <dl class="dl-horizontal">
           <span ng-repeat="size in group.sizes">
             <dt>{{size.type}}</dt>
             <dd><code>{{size.style}}: {{size.value}};</code></dd>
           </span>
-        </ul>
+        </dl>
+        <p class="{{group.name | lowercase}}-sample panel ">Sample Stuff</p>
       </div>
     </div>
 
