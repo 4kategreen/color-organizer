@@ -110,12 +110,12 @@ describe('Service: Colors', function () {
     expect(colors[0].comment).toBe('first comment second comment');
   })
 
-  xit('parses a color and places it in the correct spot: colorList[n].colors', function() {
-
-  });
-
 
   xit('parses a color link and finds the link and adds both the link and color', function() {
-
+    // if color.link, then make sure color.color is the same as the hex for color.link's color.
   });
+
+  // Deals with sizes in a non-sucky way.
+
+  // This is a lot of stuff.
 });
