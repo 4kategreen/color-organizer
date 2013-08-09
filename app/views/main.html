@@ -6,45 +6,41 @@
 </style>
 
 <div class="container">
-  <div class="row">
-    <button class="btn btn-large" ng-click="switchView(0)">Common</button>
-    <button class="btn btn-large" ng-click="switchView(1)">CHE</button>
-    <button class="btn btn-large" ng-click="switchView(2)">COP</button>
+  <div class="btn-group">
+    <button class="btn btn-default btn-large" ng-class="setClass(active.id==set.id)" ng-click="switchView(set.id)" ng-repeat="set in colorSets">{{set.name}}</button>
   </div>
-</div>
 
-<div class="container">
-    <h1>{{active}}</h1>
-    <div class="row" ng-repeat="group in elements">
-      <h2>{{group.name}}</h2>
-      <p>{{group.comment}}</p>
-      <div class="row" ng-show="group.colors">
-        <h3>Colors</h3>
-        <div class="col-lg-3 color-thumbnail" ng-repeat="color in group.colors">
-          <div class="thumbnail" style="background-color: {{color.color}}; height:100px"></div>
-          <ul class="unstyled">
-            <li><b>Color Name</b>: {{color.name}}</li>
-            <li><b>Color</b>: {{color.color}}</li>
-            <li ng-show="color.link"><b>Color Link</b>: {{color.link}}</li>
-            <li ng-show="color.comment"><b>Comment</b>: {{color.comment}}</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="row" ng-show="group.sizes">
-
-        <h3>Sizes</h3>
-        <dl class="dl-horizontal">
-          <span ng-repeat="size in group.sizes">
-            <dt>{{size.type}}</dt>
-            <dd><code>{{size.style}}: {{size.value}};</code></dd>
-          </span>
-        </dl>
-        <p class="{{group.name | lowercase}}-sample panel ">Sample Stuff</p>
+  <h1>{{active.name}}</h1>
+  <div class="" ng-repeat="group in elements">
+    <h2>{{group.name}}</h2>
+    <p>{{group.comment}}</p>
+    <div class="row" ng-show="group.colors">
+      <h3>Colors</h3>
+      <div class="col-lg-3" ng-repeat="color in group.colors">
+        <div class="thumbnail" style="background-color: {{color.color}}; height:100px"></div>
+        <ul class="unstyled">
+          <li><b>Color Name</b>: {{color.name}}</li>
+          <li><b>Color</b>: {{color.color}}</li>
+          <li ng-show="color.link"><b>Color Link</b>: {{color.link}}</li>
+          <li ng-show="color.comment"><b>Comment</b>: {{color.comment}}</li>
+        </ul>
       </div>
     </div>
 
-<div class="well" style="width: 250px; height: 250px; position:fixed; bottom:0; right:5%;">
+    <div class="row" ng-show="group.sizes">
+      <h3>Sizes</h3>
+      <dl class="dl-horizontal">
+        <span ng-repeat="size in group.sizes">
+          <dt>{{size.type}}</dt>
+          <dd><code>{{size.style}}: {{size.value}};</code></dd>
+        </span>
+      </dl>
+      <p class="{{group.name | lowercase}}-sample panel ">Sample Stuff</p>
+    </div>
+  </div>
+</div>
+
+<div class="well" style="position:fixed; bottom:0; right:5%;">
   <h2>Compare Colors</h2>
   <div class="thumbnail" style="background-color: {{manualStyle}}; height:100px;"></div>
   <label for="manualStyle">
