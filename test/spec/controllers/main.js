@@ -14,6 +14,8 @@ describe('Controller: MainCtrl', function () {
   beforeEach(inject(function ($controller, $rootScope, $injector) {
     $httpBackend = $injector.get('$httpBackend');
     $httpBackend.when('GET', 'styles/colors.less').respond(elements);
+    $httpBackend.when('GET', 'styles/colors-che.less').respond(elements);
+    $httpBackend.when('GET', 'styles/colors-cop.less').respond(elements);
 
     $httpBackend.expectGET('styles/colors.less');
 
@@ -25,7 +27,10 @@ describe('Controller: MainCtrl', function () {
     $httpBackend.flush();
   }));
 
-  xit('gets a valid object from Color', function() {
-    expect(scope.colors).toEqual(jasmine.any(Object));
+
+  it('switchView() should load the correctly chosen color set', function() {
+    scope.switchView(1);
+
+    expect(scope.active).toEqual(scope.colorSets[1]);
   });
 });

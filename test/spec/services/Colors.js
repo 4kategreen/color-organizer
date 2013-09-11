@@ -40,6 +40,7 @@ describe('Service: Colors', function () {
     expect(colors).toEqual(jasmine.any(Array));
   });
 
+
   it('should return an object where all colors have a color (not just a link)', function() {
     var colors = {},
         q = Colors.get('colors.less');
@@ -96,6 +97,7 @@ describe('Service: Colors', function () {
     // second comment is added to that group's comment.
     expect(colors[0].comment).toBe('main variables for the site');
   });
+  
 
   it('deals with multiple comments by adding it to the end of the comment field', function() {
     var colors = {},
