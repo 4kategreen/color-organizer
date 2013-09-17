@@ -5,7 +5,7 @@ angular.module('colorOrganizerApp')
     var methods = {
       parseLines: function(lines) {
         var variables = [],
-            result;
+            result, valueType;
 
         var comment = /^(\/{2})\s*(.+)/i,
             sectionComment = /^(\/{2})\s*(-+)/i,
@@ -17,7 +17,7 @@ angular.module('colorOrganizerApp')
             // COMMENT
             result = line.match(comment);
             if (result) {
-              if (sectionComment.exec(lines[key+1])) {
+              if (lines[key+1].match(sectionComment)) {
                 variables.push({
                   'type': 'section',
                   'value': result[2]
@@ -33,9 +33,12 @@ angular.module('colorOrganizerApp')
             // VARIABLES
             result = line.match(element);
             if (result) {
+              valueType = methods.getValueType(result[2]);
+
               variables.push({
                 'type': 'variable',
                 'name': result[1],
+                'valueType': valueType,
                 'value': result[2],
                 'comment': result[3]
               });
@@ -72,10 +75,33 @@ angular.module('colorOrganizerApp')
 
         if (holder.length > 0) {
           variables.push(holder);
-          holder = {};
         }
 
         return variables;
+      },
+      getValueType: function(variable) { // use less parser here?
+        // colors have #, rgb, rgba, hsl
+        var type = 'unknown',
+            hex = /^\#[0-9A-F]{3,6}/i,
+            rgb = /^rgb/i,
+            link = /^\@/i;
+
+        if (variable.match(hex) || variable.match(rgb)) {
+          type = 'color';
+        }
+
+        // math has +,-,*,/
+
+        // js functions exist
+
+        // color math (lift from less?)
+
+        // links have @
+        else if (variable.match(link)) {
+          type = 'link';
+        }
+
+        return type;
       },
       /**
         Parses any variable links to get the real color.
