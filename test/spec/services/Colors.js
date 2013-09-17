@@ -5,7 +5,9 @@ describe('Service: Colors', function () {
       Colors,
       singleGroup = "// Global values\n// --------------------------------------------------\n// main variables for the site\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;",
       doubleGroup = "// Global values\n// --------------------------------------------------\n// main variables for the site\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n\n// Second One\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;",
-      doubleComment = "// Global values\n// --------------------------------------------------\n// first comment\n// second comment\n@primary:                   #36434c;\n@secondary:                 #edf7ff;";
+      doubleComment = "// Global values\n// --------------------------------------------------\n// first comment\n// second comment\n@primary:                   #36434c;\n@secondary:                 #edf7ff;",
+      mathTest = "// Global Values\n// -------\n @px-val: 15px;\n @em-val: 1em;\n @percent-val: 100%;", // needs calculations
+      mathWithLinks = "// Global Values\n // -------\n @val: 15px;\n @calc: (@val * 2);";
 
   // load the service's module
   beforeEach(module('colorOrganizerApp'));
@@ -18,6 +20,8 @@ describe('Service: Colors', function () {
     $httpBackend.whenGET('styles/colors.less').respond(singleGroup);
     $httpBackend.whenGET('styles/double.less').respond(doubleGroup);
     $httpBackend.whenGET('styles/double-comment.less').respond(doubleComment);
+    $httpBackend.whenGET('styles/math.less').respond(mathTest);
+    $httpBackend.whenGET('styles/calc.less').respond(mathWithLinks);
   }));
 
   afterEach(function() {
@@ -102,11 +106,51 @@ describe('Service: Colors', function () {
   })
 
 
-  xit('parses a color link and finds the link and adds both the link and color', function() {
-    // if color.link, then make sure color.color is the same as the hex for color.link's color.
+  it('recognizes colors', function() {
+    var colors = {},
+        q = Colors.get('colors.less');
+
+    q.then(function(ele) {
+      colors = ele;
+    }, function(s) { console.log(s); });
+
+    $httpBackend.flush();
+
+    expect(colors[0].variables[0].valueType).toBe('color');
   });
 
-  // Deals with sizes in a non-sucky way.
+  it('recognizes links', function() {
+    var colors = {},
+        q = Colors.get('colors.less');
 
-  // This is a lot of stuff.
+    q.then(function(ele) {
+      colors = ele;
+    }, function(s) { console.log(s); });
+
+    $httpBackend.flush();
+
+    expect(colors[0].variables[3].valueType).toBe('link');
+  });
+
+  it('recognizes links inside larger statements', function() {
+    var colors = {},
+        q = Colors.get('calc.less');
+
+    q.then(function(ele) {
+      colors = ele;
+    }, function(s) { console.log(s); });
+
+    $httpBackend.flush();
+  });
+
+  xit('recognizes math', function() {
+    var colors = {},
+        q = Colors.get('math.less');
+
+    q.then(function(ele) {
+      colors = ele;
+    }, function(s) { console.log(s); });
+
+    $httpBackend.flush();
+  });
 });
