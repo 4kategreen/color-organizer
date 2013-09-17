@@ -16,14 +16,17 @@
     <ul class="list-unstyled">
       <li ng-repeat="comment in group.comments">{{comment}}</li>
     </ul>
+
+    <h3>Variables</h3>
     <div class="row" ng-show="group.variables">
-      <h3>Variables</h3>
-      <ul class="list-unstyled col-lg-3 col-md-3 col-sm-4 col-xs-6" ng-repeat="variable in group.variables">
-        <li><h4>{{variable.name}} ({{variable.valueType}})</h4></li>
-        <li>Value: {{variable.value}}</li>
-        <li ng-show="variable.link">Linked Variable: {{variable.link}}</li>
-        <li>Comment: {{variable.comment}}</li>
-      </ul>
+      <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6" ng-repeat="variable in group.variables">
+        <h4>{{variable.name}} ({{variable.valueType}})</h4>
+        <ul class="list-unstyled">
+          <li>Value: {{variable.value}}</li>
+          <li ng-show="variable.link">Linked Variable: {{variable.link}}</li>
+          <li>Comment: {{variable.comment}}</li>
+        </ul>
+      </div>
       <!-- <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6" ng-repeat="color in group.colors">
         <div class="thumbnail" style="background-color: {{color.color}}; height:100px"></div>
         <ul class="unstyled">
