@@ -25,7 +25,6 @@ angular.module('colorOrganizerApp')
     // }
 
     $scope.switchView = function(set) {
-    	console.log('in switch');
       $scope.active = $scope.colorSets[set];
       $scope.elements = Colors.get($scope.colorSets[set].file);
 
@@ -35,7 +34,7 @@ angular.module('colorOrganizerApp')
       	console.log(status);
       });
     };
-    
+
     $scope.setClass = function(bool) {
     	return bool ? 'btn-primary' : '';
     }

@@ -50,19 +50,23 @@ angular.module('colorOrganizerApp')
       },
       organize: function(lines) {
         var variables = [], 
-            holder = {};
+            holder = {
+              comments: [],
+              variables: []
+            };
 
         angular.forEach(lines, function(line) {
           switch (line.type) {
             case 'section':
-              if (holder.section) {
+              if (holder.section || holder.comments.length>0 || holder.variables.length>0) {
                 variables.push(holder);
-                holder = {};
+                holder = {
+                  comments: [],
+                  variables: []
+                };
               }
 
               holder.section = line.value;
-              holder.comments = [];
-              holder.variables = [];
               break;
             case 'comment':
               holder.comments.push(line.value);
