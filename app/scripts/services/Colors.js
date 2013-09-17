@@ -48,11 +48,11 @@ angular.module('colorOrganizerApp')
 
         return methods.organize(variables);
       },
-      organize: function(vars) {
+      organize: function(lines) {
         var variables = [], 
             holder = {};
 
-        angular.forEach(vars, function(line) {
+        angular.forEach(lines, function(line) {
           switch (line.type) {
             case 'section':
               if (holder.section) {
@@ -69,11 +69,15 @@ angular.module('colorOrganizerApp')
               break;
             case 'variable':
             default:
+              if (line.valueType === 'link') {
+                line.link = line.value;
+                line.value = methods.parseLinks(line.link, lines);
+              }
               holder.variables.push(line);
           }
         });
 
-        if (holder.length > 0) {
+        if (holder.section) {
           variables.push(holder);
         }
 
@@ -105,42 +109,23 @@ angular.module('colorOrganizerApp')
       },
       /**
         Parses any variable links to get the real color.
+
+        Gotta be a more efficient way than always looping.
       */
-      parseLinks: function(testColor, colorList) {
-        var selectedColor = false;
+      parseLinks: function(testColor, list) {
+        var selected = false,
+            i = 0;
 
-        angular.forEach(colorList, function(color) {
-          if (testColor === color[0]) {
-            selectedColor = color[1];
+        for (i=0;i<list.length;i++) {
+          if (list[i] && list[i].type === 'variable') {
+            if (list[i].name === testColor) {
+              selected = list[i].value;
+              break;
+            }
           }
-        });
+        }
 
-        return selectedColor || 'No Color Found';
-      },
-
-      /**
-        Takes all vars from a parsed list and makes one single list to test against.
-
-        Colors is default
-      */
-      createVariableList: function(vars, type) {
-        var colorList = [];
-
-        angular.forEach(vars, function(group) {
-          if (type === 'size') {
-            angular.forEach(group.sizes, function(size) {
-              colorList.push([size.name, size.size]);
-            });
-          } else {
-            angular.forEach(group.colors, function(color) {
-              if (color.color) {
-                colorList.push([color.name, color.color]);
-              }
-            });
-          }
-        });
-
-        return colorList;
+        return selected || 'No Color Found';
       }
     };
 
