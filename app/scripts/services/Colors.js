@@ -33,6 +33,7 @@ angular.module('colorOrganizerApp')
             // VARIABLES
             result = line.match(element);
             if (result) {
+              value = methods.findLinks(result[2]);
               valueType = methods.getValueType(result[2]);
 
               variables.push({
@@ -91,8 +92,7 @@ angular.module('colorOrganizerApp')
         // colors have #, rgb, rgba, hsl
         var type = 'unknown',
             hex = /^\#[0-9A-F]{3,6}/i,
-            rgb = /^rgb/i,
-            link = /^\@/i;
+            rgb = /^rgb/i;
 
         if (variable.match(hex) || variable.match(rgb)) {
           type = 'color';
@@ -104,12 +104,11 @@ angular.module('colorOrganizerApp')
 
         // color math (lift from less?)
 
-        // links have @
-        else if (variable.match(link)) {
-          type = 'link';
-        }
 
         return type;
+      },
+      findLinks: function(variable) {
+        var link = /(\@a-z\-+)\s/i;
       },
       /**
         Parses any variable links to get the real color.
