@@ -21,6 +21,7 @@
     <div class="row" ng-show="group.variables">
       <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6" ng-repeat="variable in group.variables">
         <h4>{{variable.name}} ({{variable.valueType}})</h4>
+        <h5 class="small muted" ng-show="variable.link">Linked Value</h5>
         <ul class="list-unstyled">
           <li>Value: {{variable.value|lowercase}}</li>
           <li>Raw Value: {{variable.rawValue}}</li>
