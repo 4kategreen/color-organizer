@@ -6,7 +6,7 @@ angular.module('colorOrganizerApp')
 
     var methods = {
       parseLines: function(lines) {
-        var result, value, valueType;
+        var result, value, rawValue, valueType;
 
         var comment = /^(\/{2})\s*(.+)/i,
             sectionComment = /^(\/{2})\s*(-+)/i,
@@ -34,16 +34,18 @@ angular.module('colorOrganizerApp')
             // VARIABLES
             result = line.match(element);
             if (result) {
-              value = methods.findLinks(result[2]);
+              rawValue = methods.trim(result[2]);
+              value = methods.findLinks(rawValue);
               valueType = methods.getValueType(value);
 
               variables.push({
                 'type': 'variable',
-                'name': result[1],
+                'name': methods.trim(result[1]),
                 'valueType': valueType,
-                'rawValue': result[2],
+                'rawValue': rawValue,
                 'value': value,
-                'comment': result[3]
+                'link': !(value === rawValue),
+                'comment': methods.trim(result[3])
               });
             }
           }
@@ -52,7 +54,7 @@ angular.module('colorOrganizerApp')
         return methods.organize(variables);
       },
       organize: function(lines) {
-        var variables = [], 
+        var variables = [],
             holder = {
               comments: [],
               variables: []
@@ -116,7 +118,7 @@ angular.module('colorOrganizerApp')
           link = methods.parseLinks(result[0], variables);
 
           // switch out link for variable
-          value = variable.replace(result,link);
+          value = value.replace(result,link);
         }
 
         return value;
@@ -140,6 +142,9 @@ angular.module('colorOrganizerApp')
         }
 
         return selected || 'No Color Found';
+      },
+      trim: function(str) {
+        return (str || '').replace(/^\s+|\s+$/g, '');
       }
     };
 

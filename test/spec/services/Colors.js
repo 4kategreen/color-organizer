@@ -1,13 +1,13 @@
 'use strict';
 
-describe('Service: Colors', function () {
+describe('Service: Colors:', function () {
   var $httpBackend,
       Colors,
       singleGroup = "// Global values\n// --------------------------------------------------\n// main variables for the site\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;",
       doubleGroup = "// Global values\n// --------------------------------------------------\n// main variables for the site\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n\n// Second One\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;",
       doubleComment = "// Global values\n// --------------------------------------------------\n// first comment\n// second comment\n@primary:                   #36434c;\n@secondary:                 #edf7ff;",
       mathTest = "// Global Values\n// -------\n@px-val: 15px;\n@em-val: 1em;\n@percent-val: 100%;", // needs calculations
-      mathWithLinks = "// Global Values\n// -------\n@val: 15px;\n@calc: (@val * 2);";
+      mathWithLinks = "// Global Values\n// -------\n@val: 15px;\n@calc: (@val * 2);\n@calc-Two: (@val + @calc);";
 
   // load the service's module
   beforeEach(module('colorOrganizerApp'));
@@ -92,6 +92,7 @@ describe('Service: Colors', function () {
 
 
   it('deals with multiple comments by adding it to the end of the comment field', function() {
+    $httpBackend.expectGET('styles/double-comment.less');
     var colors = {},
         q = Colors.get('double-comment.less');
 
@@ -119,22 +120,52 @@ describe('Service: Colors', function () {
     expect(colors[0].variables[0].valueType).toBe('color');
   });
 
+  describe('Links to Other Variables:', function() {
+    it('recognizes a single link inside larger statements', function() {
+      $httpBackend.expectGET('styles/calc.less');
+      var colors = {},
+          q = Colors.get('calc.less');
 
-  it('recognizes links inside larger statements', function() {
-    var colors = {},
-        q = Colors.get('calc.less');
+      q.then(function(ele) {
+        colors = ele;
+      }, function(s) { console.log(s); });
 
-    q.then(function(ele) {
-      colors = ele;
-    }, function(s) { console.log(s); });
+      $httpBackend.flush();
 
-    $httpBackend.flush();
+      expect(colors[0].variables[1].value).toBe('(15px * 2)');
+    });
 
-    expect(colors[0].variables[1].value).toBe('(15px * 2)');
+
+    it('recognizes more than one link inside larger statements', function() {
+      var colors = {},
+          q = Colors.get('calc.less');
+
+      q.then(function(ele) {
+        colors = ele;
+      }, function(s) { console.log(s); });
+
+      $httpBackend.flush();
+
+      expect(colors[0].variables[2].value).toBe('(15px + (15px * 2))');
+    });
+
+    it('recognizes dashes and uppercase inside a variable', function() {
+      var colors = {},
+          q = Colors.get('colors.less');
+
+      q.then(function(ele) {
+        colors = ele;
+      }, function(s) { console.log(s); });
+
+      $httpBackend.flush();
+
+      expect(colors[0].variables[3].name).toBe('@base-color');
+    })
   });
 
 
   xit('recognizes math', function() {
+    $httpBackend.expectGET('styles/math.less');
     var colors = {},
         q = Colors.get('math.less');
 
