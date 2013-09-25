@@ -89,7 +89,7 @@ describe('Service: Colors', function () {
     // second comment is added to that group's comment.
     expect(colors[0].comments[0]).toBe('main variables for the site');
   });
-  
+
 
   it('deals with multiple comments by adding it to the end of the comment field', function() {
     var colors = {},
@@ -119,18 +119,6 @@ describe('Service: Colors', function () {
     expect(colors[0].variables[0].valueType).toBe('color');
   });
 
-  it('recognizes links', function() {
-    var colors = {},
-        q = Colors.get('colors.less');
-
-    q.then(function(ele) {
-      colors = ele;
-    }, function(s) { console.log(s); });
-
-    $httpBackend.flush();
-
-    expect(colors[0].variables[3].valueType).toBe('link');
-  });
 
   it('recognizes links inside larger statements', function() {
     var colors = {},
@@ -141,7 +129,10 @@ describe('Service: Colors', function () {
     }, function(s) { console.log(s); });
 
     $httpBackend.flush();
+
+    expect(colors[0].variables[1].value).toBe('(15px * 2)');
   });
+
 
   xit('recognizes math', function() {
     var colors = {},

@@ -2,10 +2,11 @@
 
 angular.module('colorOrganizerApp')
   .service('Colors', ['$http', '$q', function ($http, $q) {
+    var variables = [];
+
     var methods = {
       parseLines: function(lines) {
-        var variables = [],
-            result, valueType;
+        var result, value, valueType;
 
         var comment = /^(\/{2})\s*(.+)/i,
             sectionComment = /^(\/{2})\s*(-+)/i,
@@ -34,13 +35,14 @@ angular.module('colorOrganizerApp')
             result = line.match(element);
             if (result) {
               value = methods.findLinks(result[2]);
-              valueType = methods.getValueType(result[2]);
+              valueType = methods.getValueType(value);
 
               variables.push({
                 'type': 'variable',
                 'name': result[1],
                 'valueType': valueType,
-                'value': result[2],
+                'rawValue': result[2],
+                'value': value,
                 'comment': result[3]
               });
             }
@@ -74,10 +76,6 @@ angular.module('colorOrganizerApp')
               break;
             case 'variable':
             default:
-              if (line.valueType === 'link') {
-                line.link = line.value;
-                line.value = methods.parseLinks(line.link, lines);
-              }
               holder.variables.push(line);
           }
         });
@@ -108,7 +106,19 @@ angular.module('colorOrganizerApp')
         return type;
       },
       findLinks: function(variable) {
-        var link = /(\@a-z\-+)\s/i;
+        var result,
+            link,
+            value = variable,
+            linkExp = /(@[\w\-])+/gi;
+
+        while (result = linkExp.exec(variable) !== null) {
+          // parse link
+          link = methods.parseLinks(result, variables);
+          // switch out link for variable
+          value = 'linked result';
+        }
+
+        return value;
       },
       /**
         Parses any variable links to get the real color.
