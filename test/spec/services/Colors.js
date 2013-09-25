@@ -6,8 +6,8 @@ describe('Service: Colors', function () {
       singleGroup = "// Global values\n// --------------------------------------------------\n// main variables for the site\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;",
       doubleGroup = "// Global values\n// --------------------------------------------------\n// main variables for the site\n@primary:                   #36434c;\n@secondary:                 #edf7ff;\n\n// Second One\n@tertiary:                  #B6CBD9;\n@base-color :               @primary;\n@heading-color:             #36434d;\n@secondary-heading-color:   #0088cc;",
       doubleComment = "// Global values\n// --------------------------------------------------\n// first comment\n// second comment\n@primary:                   #36434c;\n@secondary:                 #edf7ff;",
-      mathTest = "// Global Values\n// -------\n @px-val: 15px;\n @em-val: 1em;\n @percent-val: 100%;", // needs calculations
-      mathWithLinks = "// Global Values\n // -------\n @val: 15px;\n @calc: (@val * 2);";
+      mathTest = "// Global Values\n// -------\n@px-val: 15px;\n@em-val: 1em;\n@percent-val: 100%;", // needs calculations
+      mathWithLinks = "// Global Values\n// -------\n@val: 15px;\n@calc: (@val * 2);";
 
   // load the service's module
   beforeEach(module('colorOrganizerApp'));

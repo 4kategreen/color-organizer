@@ -109,13 +109,14 @@ angular.module('colorOrganizerApp')
         var result,
             link,
             value = variable,
-            linkExp = /(@[\w\-])+/gi;
+            linkExp = /@[\-\w]+/gi;
 
-        while (result = linkExp.exec(variable) !== null) {
+        while ((result = linkExp.exec(variable)) !== null) {
           // parse link
-          link = methods.parseLinks(result, variables);
+          link = methods.parseLinks(result[0], variables);
+
           // switch out link for variable
-          value = 'linked result';
+          value = variable.replace(result,link);
         }
 
         return value;
